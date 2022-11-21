@@ -4,6 +4,7 @@ import 'package:test_elisoft/ui/cubits/home_cubit.dart';
 import 'package:test_elisoft/ui/widgets/custom_text_field.dart';
 
 import '../../data/models/user_login_response.dart';
+import '../blocs/article_bloc/article_bloc.dart';
 import '../blocs/login_bloc/login_bloc.dart';
 import 'home_screen.dart';
 
@@ -15,7 +16,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final usernameController = TextEditingController(text: "rachman.latif@gmail.com");
+  final usernameController =
+      TextEditingController(text: "rachman.latif@gmail.com");
   final passwordController = TextEditingController(text: "testing");
 
   @override
@@ -39,19 +41,27 @@ class _LoginScreenState extends State<LoginScreen> {
                   suffixIcon: const Icon(Icons.remove_red_eye),
                 ),
                 BlocConsumer<LoginBloc, LoginState>(
-                  listener: (context,state){
-                    if(state is LoginSuccess){
+                  listener: (context, state) {
+                    if (state is LoginSuccess) {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) {
-                            return BlocProvider(
-                                create: (_)=>HomeCubit(state.response.user ?? User()),
-                                child: HomeScreen());
+                            return MultiBlocProvider(
+                              providers: [
+                                BlocProvider(create: (_) {
+                                  return HomeCubit(
+                                      state.response.user ?? User());
+                                }),
+                                BlocProvider(
+                                  create: (context) => ArticleBloc(),
+                                ),
+                              ],
+                              child: HomeScreen(),
+                            );
                           },
                         ),
                       );
                     }
-
                   },
                   builder: (context, state) {
                     return Row(
@@ -59,26 +69,29 @@ class _LoginScreenState extends State<LoginScreen> {
                         Expanded(
                           child: ElevatedButton(
                             onPressed: () {
-                              context.read<LoginBloc>().add(LoginToServerEvent(usernameController.text, passwordController.text));
+                              context.read<LoginBloc>().add(LoginToServerEvent(
+                                  usernameController.text,
+                                  passwordController.text));
                             },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blueGrey),
                             child: ConstrainedBox(
-                              constraints: const BoxConstraints(
-                                maxHeight: 64
-                              ),
+                              constraints: const BoxConstraints(maxHeight: 64),
                               child: Container(
                                 padding: const EdgeInsets.all(16.0),
-                                child:
-                                (state is LoginLoading) ? const FittedBox(child:  CircularProgressIndicator(color: Colors.white,)) :
-                                const Center(
-                                  child: Text(
-                                    "LOGIN",
-                                    style: TextStyle(
+                                child: (state is LoginLoading)
+                                    ? const FittedBox(
+                                        child: CircularProgressIndicator(
                                         color: Colors.white,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
+                                      ))
+                                    : const Center(
+                                        child: Text(
+                                          "LOGIN",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
                               ),
                             ),
                           ),

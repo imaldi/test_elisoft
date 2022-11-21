@@ -29,7 +29,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           throw TimeoutException("Login Gagal");
         });
 
-        emit(LoginSuccess(UserLoginResponse.fromJson(jsonDecode(response.body))));
+        if(response.statusCode == 200) {
+          emit(LoginSuccess(UserLoginResponse.fromJson(jsonDecode(response.body))));
+          return;
+        }
+        emit(LoginFailed("Server Error (code:${response.statusCode})"));
+
       } on TimeoutException {
         emit(const LoginFailed("TimeOut"));
       }
