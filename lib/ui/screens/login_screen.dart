@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_elisoft/ui/cubits/home_cubit.dart';
 import 'package:test_elisoft/ui/widgets/custom_text_field.dart';
 
-import '../blocs/login_bloc.dart';
+import '../../data/models/user_login_response.dart';
+import '../blocs/login_bloc/login_bloc.dart';
 import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -41,7 +43,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     if(state is LoginSuccess){
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => HomeScreen(state.response),
+                          builder: (context) {
+                            return BlocProvider(
+                                create: (_)=>HomeCubit(state.response.user ?? User()),
+                                child: HomeScreen());
+                          },
                         ),
                       );
                     }

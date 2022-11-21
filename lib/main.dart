@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_elisoft/ui/blocs/login_bloc.dart';
+import 'package:test_elisoft/ui/blocs/login_bloc/login_bloc.dart';
 import 'package:test_elisoft/ui/screens/login_screen.dart';
 
 void main() {

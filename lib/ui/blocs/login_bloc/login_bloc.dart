@@ -6,7 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:http/http.dart' as http;
 import 'package:test_elisoft/core/consts/urls.dart';
 
-import '../../data/models/user_login_response.dart';
+import '../../../data/models/user_login_response.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
