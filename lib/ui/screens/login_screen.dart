@@ -29,7 +29,8 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                const Text("My APPS"),
+                const Text("My APPS",style: TextStyle(fontSize: 32),),
+                Icon(Icons.home,color: Colors.blueAccent,size: 256,),
                 CustomTextField(
                   controller: usernameController,
                   labelText: "Username",
